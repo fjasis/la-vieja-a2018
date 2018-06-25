@@ -8,6 +8,8 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<time.h>
+#include<math.h>
+#include"minimax.h"
 
 
 
@@ -16,7 +18,6 @@ typedef struct persona {
 	int edad;
 	char sexo[9];
 }jugador;
-
 void seleccionmodo(int *d, int *m);
 void datos(int m);
 void generarmatriz(char matriz[][3], int i, int j);
@@ -28,8 +29,10 @@ void jugadausuario(char matriz[][3], char t);
 char revision(char matriz[3][3], char caracterus, int m, jugador j1, jugador j2);
 void jugadacomputador(char matriz[][3], char t);
 void jugadacomputadormedio(char matriz[][3],char t,char us);
-int win(const int board[9]);
 void minimaxplay(char matriz[][3], char t);
+
+
+
 
 char matriz[3][3], caracterus, turno, band = 'F', k[9] ;
 int i, j, dificultad, modo, bol = 0, *m, *d ;
@@ -71,8 +74,16 @@ int main() {
 				turno = seleccionturno(turno);
 			}
 			if(dificultad==2){
-				minimaxplay(matriz,turno);
-
+				if(turno==caracterus){
+					jugadausuario(matriz,turno);
+				}else{
+					minimaxplay(matriz,turno);
+				}
+				mostrarmatriz(matriz, i, j, turno, caracterus, jugador1, jugador2, modo);
+				printf("\n------------------\n");
+				revision(matriz, caracterus, modo, jugador1, jugador2);
+				band = revision(matriz, caracterus, modo, jugador1, jugador2);
+				turno = seleccionturno(turno);
 			}
 		}
 	}
@@ -119,7 +130,6 @@ int main() {
 	*/
 	return 0;
 }
-
 void seleccionmodo(int *d, int *m) {
 	printf("Seleccione contra quien desea jugar: \n\t1.Computadora\n\t2.Otro Usuario\n");
 	scanf("%i", m);
@@ -473,7 +483,8 @@ void jugadacomputador(char matriz[][3], char t) {
 }
 
 void minimaxplay(char matriz[][3], char t){
-	
-
+	Movida bestmove = buscamejormovida(matriz);
+	printf( "movida %i, %i\n ", bestmove.fil,bestmove.col);
+ 	matriz[bestmove.fil][bestmove.col] = t;
 
 }
